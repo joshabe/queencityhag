@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CityFilterDropdown from "@/components/CityFilterDropdown";
+import CityFilterMobileDropdown from "@/components/CityFilterMobileDropdown";
 import RatingFilterDropdown from "@/components/RatingFilterDropdown";
 
 function buildHref(rating: string | undefined, city: string | undefined) {
@@ -22,7 +23,7 @@ export default function RatingFilterBar({
   cities,
 }: {
   current?: string;
-  city?: string;
+  city: string;
   cities: string[];
 }) {
   const fireValues = [1, 2, 3].map((n) => `fire-${n}`);
@@ -72,8 +73,11 @@ export default function RatingFilterBar({
           </div>
         </div>
 
-        <div className="shrink-0">
-          <CityFilterDropdown cities={cities} />
+        <div className="shrink-0 sm:hidden">
+          <CityFilterMobileDropdown cities={cities} current={city} />
+        </div>
+        <div className="hidden sm:block shrink-0">
+          <CityFilterDropdown cities={cities} current={city} />
         </div>
       </div>
     </div>

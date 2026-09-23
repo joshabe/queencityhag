@@ -50,6 +50,7 @@ export async function PUT(request: Request, { params }: Params) {
     excerpt,
     coverImage,
     city,
+    websiteUrl,
     sourceUrl,
     ratingType,
     ratingCount,
@@ -63,6 +64,7 @@ export async function PUT(request: Request, { params }: Params) {
     excerpt?: string | null;
     coverImage?: string | null;
     city?: string | null;
+    websiteUrl?: string | null;
     sourceUrl?: string | null;
     ratingType?: string | null;
     ratingCount?: number | null;
@@ -78,6 +80,7 @@ export async function PUT(request: Request, { params }: Params) {
   if (excerpt !== undefined) data.excerpt = excerpt || null;
   if (coverImage !== undefined) data.coverImage = coverImage || null;
   if (city !== undefined) data.city = city || null;
+  if (websiteUrl !== undefined) data.websiteUrl = websiteUrl || null;
   if (sourceUrl !== undefined) data.sourceUrl = sourceUrl || null;
   if (ratingType !== undefined || ratingCount !== undefined) {
     const validType = ratingType === "fire" || ratingType === "knife";

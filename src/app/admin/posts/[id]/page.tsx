@@ -21,6 +21,7 @@ export default async function EditPostPage({
         excerpt: post.excerpt,
         coverImage: post.coverImage,
         city: post.city,
+        websiteUrl: post.websiteUrl,
         sourceUrl: post.sourceUrl,
         ratingType: post.ratingType,
         ratingCount: post.ratingCount,

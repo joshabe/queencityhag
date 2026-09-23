@@ -16,6 +16,7 @@ type PostData = {
   excerpt: string | null;
   coverImage: string | null;
   city: string | null;
+  websiteUrl: string | null;
   sourceUrl: string | null;
   ratingType: string | null;
   ratingCount: number | null;
@@ -31,6 +32,7 @@ export default function PostForm({ initial }: { initial?: PostData }) {
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? "");
   const [coverImage, setCoverImage] = useState(initial?.coverImage ?? "");
   const [city, setCity] = useState(initial?.city ?? "Charlotte, NC");
+  const [websiteUrl, setWebsiteUrl] = useState(initial?.websiteUrl ?? "");
   const [sourceUrl, setSourceUrl] = useState(initial?.sourceUrl ?? "");
   const [ratingType, setRatingType] = useState<"fire" | "knife" | null>(
     (initial?.ratingType as "fire" | "knife" | null) ?? null
@@ -78,6 +80,7 @@ export default function PostForm({ initial }: { initial?: PostData }) {
         excerpt: excerpt || null,
         coverImage: coverImage || null,
         city: city || null,
+        websiteUrl: websiteUrl || null,
         sourceUrl: sourceUrl || null,
         ratingType,
         ratingCount,
@@ -170,6 +173,19 @@ export default function PostForm({ initial }: { initial?: PostData }) {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           placeholder="Charlotte, NC"
+          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <label htmlFor="websiteUrl" className="text-sm text-gray-700">
+          Restaurant website (optional)
+        </label>
+        <input
+          id="websiteUrl"
+          value={websiteUrl}
+          onChange={(e) => setWebsiteUrl(e.target.value)}
+          placeholder="https://..."
           className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
         />
       </div>

@@ -25,6 +25,7 @@ model Post {
   ratingType  String? // "fire" | "knife"
   ratingCount Int? // 1-3
   city        String? // e.g. "Charlotte, NC"
+  websiteUrl  String? // the restaurant's own website
   sourceUrl   String? // link to the original Substack post, if imported
   isReview    Boolean   @default(true) // false for quick mentions with no full write-up
   published   Boolean   @default(false)

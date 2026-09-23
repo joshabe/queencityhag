@@ -6,6 +6,8 @@ import RatingFilterBar from "@/components/RatingFilterBar";
 
 export const dynamic = "force-dynamic";
 
+const DEFAULT_CITY = "Charlotte, NC";
+
 function parseRating(value: string | undefined) {
   if (!value) return null;
   const match = /^(fire|knife)-([1-3])$/.exec(value);
@@ -20,6 +22,7 @@ export default async function HomePage({
 }) {
   const { rating, city } = await searchParams;
   const parsed = parseRating(rating);
+  const effectiveCity = city ?? DEFAULT_CITY;
 
   const [posts, cityRows] = await Promise.all([
     prisma.post.findMany({
@@ -28,7 +31,7 @@ export default async function HomePage({
         ...(parsed
           ? { ratingType: parsed.ratingType, ratingCount: parsed.ratingCount }
           : {}),
-        ...(city ? { city } : {}),
+        city: effectiveCity,
       },
       orderBy: { publishedAt: "desc" },
     }),
@@ -42,19 +45,25 @@ export default async function HomePage({
   const cities = cityRows
     .map((row) => row.city)
     .filter((c): c is string => Boolean(c))
-    .sort();
+    .sort((a, b) => {
+      const stateA = a.split(", ").pop() ?? "";
+      const stateB = b.split(", ").pop() ?? "";
+      return stateA !== stateB
+        ? stateA.localeCompare(stateB)
+        : a.localeCompare(b);
+    });
 
   const col1 = posts.filter((_, i) => i % 2 === 0);
   const col2 = posts.filter((_, i) => i % 2 === 1);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen max-w-[1000px] mx-auto">
       <SiteHeader />
 
-      <main className="max-w-6xl mx-auto px-4 pb-20">
+      <main className="px-4 pb-20">
         <RatingFilterBar
           current={parsed ? rating : undefined}
-          city={city}
+          city={effectiveCity}
           cities={cities}
         />
 

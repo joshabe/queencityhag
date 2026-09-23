@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "@prisma/client";
+import { displayUrl } from "@/lib/displayUrl";
 
 export default function PostCard({
   post,
@@ -15,7 +16,22 @@ export default function PostCard({
           <Link href={`/posts/${post.slug}`}>{post.title}</Link>
         </h2>
         {post.city && (
-          <p className="text-sm uppercase mt-1">{post.city}</p>
+          <p className="text-sm uppercase mt-1">
+            {post.city}
+            {post.websiteUrl && (
+              <>
+                {" | "}
+                <a
+                  href={post.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="normal-case hover:opacity-70"
+                >
+                  {displayUrl(post.websiteUrl)} ↗
+                </a>
+              </>
+            )}
+          </p>
         )}
       </div>
 
@@ -47,9 +63,9 @@ export default function PostCard({
                   href={post.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-bold whitespace-nowrap hover:opacity-70"
+                  className="text-sm font-bold whitespace-nowrap hover:opacity-70"
                 >
-                  Read full review ↗
+                  Read full review
                 </a>
               )}
             </div>
