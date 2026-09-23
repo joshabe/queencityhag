@@ -29,7 +29,8 @@ export default function PostCard({
               <img src={post.coverImage} alt={post.title} />
             </div>
           </Link>
-          {((post.ratingType && post.ratingCount) || post.sourceUrl) && (
+          {((post.ratingType && post.ratingCount) ||
+            (post.isReview && post.sourceUrl)) && (
             <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between gap-3 bg-[#f2eee9] border-t-[2px] border-b-[2px] border-[var(--hag-blue)] px-6 pt-[10px] pb-2">
               <div className="flex items-center gap-2 pointer-events-none">
                 {post.ratingType && post.ratingCount && (
@@ -43,14 +44,14 @@ export default function PostCard({
                   </>
                 )}
               </div>
-              {post.sourceUrl && (
+              {post.isReview && post.sourceUrl && (
                 <a
                   href={post.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-bold whitespace-nowrap hover:opacity-70"
                 >
-                  {post.isReview ? "Read full review ↗" : "Read the newsletter ↗"}
+                  Read full review ↗
                 </a>
               )}
             </div>
