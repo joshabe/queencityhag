@@ -69,12 +69,10 @@
   inset: -50%;
   width: 200%;
   height: 200%;
-  background-image: radial-gradient(
-    circle,
-    var(--hag-blue) 34%,
-    transparent 35%
-  );
-  background-size: 3.5px 3.5px;
+  background-image: url("/textures/halftone-tile-v2.png");
+  background-repeat: repeat;
+  background-size: 60px 60px;
+  background-position: center;
   transform: rotate(45deg);
   transform-origin: center;
   mix-blend-mode: multiply;
