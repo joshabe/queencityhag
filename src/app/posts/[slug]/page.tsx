@@ -56,7 +56,7 @@ export default async function PostPage({
                       rel="noopener noreferrer"
                       className="font-bold whitespace-nowrap hover:opacity-70"
                     >
-                      Read full review ↗
+                      {post.isReview ? "Read full review ↗" : "Read the newsletter ↗"}
                     </a>
                   )}
                 </div>

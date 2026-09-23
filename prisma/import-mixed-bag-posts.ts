@@ -830,6 +830,7 @@ async function main() {
         slug,
         city: p.city,
         sourceUrl: p.sourceUrl,
+        isReview: false,
         coverImage: p.coverImage,
         excerpt: p.excerpt,
         content: `<p>${p.excerpt}</p>`,

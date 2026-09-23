@@ -17,6 +17,7 @@ type PostData = {
   coverImage: string | null;
   city: string | null;
   sourceUrl: string | null;
+  isReview: boolean;
   ratingType: string | null;
   ratingCount: number | null;
   published: boolean;
@@ -32,6 +33,7 @@ export default function PostForm({ initial }: { initial?: PostData }) {
   const [coverImage, setCoverImage] = useState(initial?.coverImage ?? "");
   const [city, setCity] = useState(initial?.city ?? "Charlotte, NC");
   const [sourceUrl, setSourceUrl] = useState(initial?.sourceUrl ?? "");
+  const [isReview, setIsReview] = useState(initial?.isReview ?? true);
   const [ratingType, setRatingType] = useState<"fire" | "knife" | null>(
     (initial?.ratingType as "fire" | "knife" | null) ?? null
   );
@@ -79,6 +81,7 @@ export default function PostForm({ initial }: { initial?: PostData }) {
         coverImage: coverImage || null,
         city: city || null,
         sourceUrl: sourceUrl || null,
+        isReview,
         ratingType,
         ratingCount,
         published: publishOverride ?? published,
@@ -185,6 +188,21 @@ export default function PostForm({ initial }: { initial?: PostData }) {
           placeholder="https://queencityhag.substack.com/p/..."
           className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
         />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <input
+          id="isReview"
+          type="checkbox"
+          checked={isReview}
+          onChange={(e) => setIsReview(e.target.checked)}
+          className="h-4 w-4 rounded border-gray-300"
+        />
+        <label htmlFor="isReview" className="text-sm text-gray-700">
+          This is a full review (uncheck for a quick mention — the source
+          link will read &quot;Read the newsletter&quot; instead of &quot;Read
+          full review&quot;)
+        </label>
       </div>
 
       <div className="space-y-1">

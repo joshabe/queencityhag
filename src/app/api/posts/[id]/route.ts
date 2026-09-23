@@ -51,6 +51,7 @@ export async function PUT(request: Request, { params }: Params) {
     coverImage,
     city,
     sourceUrl,
+    isReview,
     ratingType,
     ratingCount,
     published,
@@ -64,6 +65,7 @@ export async function PUT(request: Request, { params }: Params) {
     coverImage?: string | null;
     city?: string | null;
     sourceUrl?: string | null;
+    isReview?: boolean;
     ratingType?: string | null;
     ratingCount?: number | null;
     published?: boolean;
@@ -79,6 +81,7 @@ export async function PUT(request: Request, { params }: Params) {
   if (coverImage !== undefined) data.coverImage = coverImage || null;
   if (city !== undefined) data.city = city || null;
   if (sourceUrl !== undefined) data.sourceUrl = sourceUrl || null;
+  if (typeof isReview === "boolean") data.isReview = isReview;
   if (ratingType !== undefined || ratingCount !== undefined) {
     const validType = ratingType === "fire" || ratingType === "knife";
     const validCount =
