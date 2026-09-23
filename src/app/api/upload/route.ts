@@ -38,11 +38,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "File too large" }, { status: 400 });
   }
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  const uploadsDir =
+    process.env.UPLOADS_DIR || path.join(process.cwd(), "public", "uploads");
   await mkdir(uploadsDir, { recursive: true });
 
   const filename = `${randomUUID()}.${ext}`;
-  const filePath = path.join(uploadsDir, filename);
+  const filePath = path.join(/*turbopackIgnore: true*/ uploadsDir, filename);
   const buffer = Buffer.from(await file.arrayBuffer());
   await writeFile(filePath, buffer);
 
