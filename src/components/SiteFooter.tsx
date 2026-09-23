@@ -7,7 +7,7 @@ export default function SiteFooter() {
         rel="noopener noreferrer"
         className="border-[2px] border-[var(--hag-blue)] rounded-full px-8 py-3 font-bold hover:bg-[var(--hag-blue)] hover:text-white transition-colors"
       >
-        Get on the list
+        Get the Newsletter
       </a>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img

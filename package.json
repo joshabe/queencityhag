@@ -11,7 +11,7 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "deploy:setup": "prisma db push --skip-generate && tsx prisma/seed.ts && tsx prisma/import-qch-posts.ts && tsx prisma/set-ratings.ts && tsx prisma/set-source-urls.ts && tsx prisma/clean-titles.ts"
+    "deploy:setup": "prisma db push --skip-generate && tsx prisma/seed.ts && tsx prisma/import-qch-posts.ts && tsx prisma/set-ratings.ts && tsx prisma/set-source-urls.ts && tsx prisma/clean-titles.ts && tsx prisma/import-mixed-bag-posts.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
