@@ -115,8 +115,13 @@ async function uniqueSlug(base: string) {
 
 async function main() {
   for (const p of posts) {
-    const existing = await prisma.post.findFirst({
-      where: { title: p.title },
+    // Check by the slug this title would generate, not the title itself —
+    // clean-titles.ts renames the title after creation (stripping the
+    // "[REVIEW]" prefix and emoji), so matching on title would never find
+    // the existing post on subsequent runs and would create a duplicate.
+    const expectedSlug = slugify(p.title, { lower: true, strict: true }) || "post";
+    const existing = await prisma.post.findUnique({
+      where: { slug: expectedSlug },
     });
     if (existing) {
       console.log(`Skipping existing post: ${p.title}`);
