@@ -1,26 +1,114 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --hag-blue: #0000ff;
+  --background: #f2eee9;
+  --foreground: var(--hag-blue);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-hag-blue: var(--hag-blue);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body), ui-monospace, monospace;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading), Georgia, serif;
+  }
+
+  a {
+    color: var(--hag-blue);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Blue newsprint-halftone photo treatment — applies uniformly to any uploaded image, no pre-editing needed. */
+.hag-photo {
+  position: relative;
+  overflow: hidden;
+  background: #ceceffa1;
+  isolation: isolate;
+}
+
+.hag-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Light, faded newsprint look — soft contrast, bright base so the blue tint dominates */
+  filter: grayscale(1) contrast(1.15) brightness(1.45);
+  opacity: 0.8;
+}
+
+/* Tints the posterized photo blue while preserving its luminance (the "printed in blue" look) */
+.hag-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--hag-blue);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+/* Classic 45°-screen halftone dot grid, oversized + centered so rotation leaves no gaps at the corners */
+.hag-photo::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(
+    circle,
+    var(--hag-blue) 34%,
+    transparent 35%
+  );
+  background-size: 3.5px 3.5px;
+  transform: rotate(45deg);
+  transform-origin: center;
+  mix-blend-mode: multiply;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Rendered post body copy, styled to match the site's blue monospace voice */
+.hag-prose {
+  font-family: var(--font-body), ui-monospace, monospace;
+  color: var(--hag-blue);
+}
+.hag-prose h1,
+.hag-prose h2,
+.hag-prose h3,
+.hag-prose h4 {
+  font-family: var(--font-heading), Georgia, serif;
+  color: var(--hag-blue);
+  font-weight: 700;
+}
+.hag-prose a {
+  color: var(--hag-blue);
+  text-decoration: underline;
+}
+.hag-prose strong {
+  color: var(--hag-blue);
+}
+.hag-prose blockquote {
+  color: var(--hag-blue);
+  border-left-color: var(--hag-blue);
+}
+.hag-prose code {
+  color: var(--hag-blue);
+}
+.hag-prose img {
+  border: 2px solid var(--hag-blue);
 }

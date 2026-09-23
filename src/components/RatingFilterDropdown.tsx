@@ -1,0 +1,58 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+
+const OPTIONS = [
+  { value: "", label: "All ratings" },
+  { value: "fire-1", label: "🔥 (1)" },
+  { value: "fire-2", label: "🔥🔥 (2)" },
+  { value: "fire-3", label: "🔥🔥🔥 (3)" },
+  { value: "knife-1", label: "🔪 (1)" },
+  { value: "knife-2", label: "🔪🔪 (2)" },
+  { value: "knife-3", label: "🔪🔪🔪 (3)" },
+];
+
+export default function RatingFilterDropdown() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (e.target.value) {
+      params.set("rating", e.target.value);
+    } else {
+      params.delete("rating");
+    }
+    const query = params.toString();
+    router.push(query ? `/?${query}` : "/");
+  }
+
+  return (
+    <div className="relative inline-flex items-center min-w-0">
+      <select
+        value={searchParams.get("rating") ?? ""}
+        onChange={handleChange}
+        className="w-full appearance-none border-[2px] border-[var(--hag-blue)] pl-3 pr-8 py-1.5 font-bold text-sm leading-5 bg-[#f2eee9]"
+      >
+        {OPTIONS.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      <svg
+        className="pointer-events-none absolute right-2 w-3 h-3"
+        viewBox="0 0 12 12"
+        fill="none"
+      >
+        <path
+          d="M2.5 4.5L6 8L9.5 4.5"
+          stroke="var(--hag-blue)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
