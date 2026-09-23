@@ -20,12 +20,10 @@ export default async function PostPage({
 
       <main className="max-w-2xl mx-auto px-4 sm:px-0 pb-20">
         <article className="border-[2px] border-[var(--hag-blue)]">
-          <div className="p-6 pb-4 flex items-center justify-between gap-3">
+          <div className="px-6 pt-4 pb-3">
             <h1 className="text-4xl font-bold">{post.title}</h1>
             {post.city && (
-              <p className="shrink-0 text-sm uppercase text-right">
-                {post.city}
-              </p>
+              <p className="text-sm uppercase mt-1">{post.city}</p>
             )}
           </div>
 

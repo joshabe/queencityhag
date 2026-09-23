@@ -10,14 +10,12 @@ export default function PostCard({
 }) {
   return (
     <article className={className}>
-      <div className="p-6 pb-4 flex items-center justify-between gap-3">
+      <div className="px-6 pt-4 pb-3">
         <h2 className="text-3xl font-bold">
           <Link href={`/posts/${post.slug}`}>{post.title}</Link>
         </h2>
         {post.city && (
-          <p className="shrink-0 text-sm uppercase text-right">
-            {post.city}
-          </p>
+          <p className="text-sm uppercase mt-1">{post.city}</p>
         )}
       </div>
 
