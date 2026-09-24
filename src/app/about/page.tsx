@@ -1,6 +1,5 @@
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import ContactForm from "@/components/ContactForm";
 
 export default function AboutPage() {
   return (
@@ -22,13 +21,6 @@ export default function AboutPage() {
           All opinions expressed and restaurants visited by a real person who
           paid for their own food (meaning, honest, real reviews).
         </p>
-
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-4">
-            Get in touch with The Hag
-          </h2>
-          <ContactForm />
-        </div>
       </main>
 
       <SiteFooter />
