@@ -22,9 +22,11 @@ model Post {
   content     String // Tiptap HTML output
   excerpt     String?
   coverImage  String?
+  priceCount  Int? // 1-4, rendered as $ to $$$$ (backend/filter only, not shown on posts)
   ratingType  String? // "fire" | "knife"
-  ratingCount Int? // 1-3
+  ratingCount Int? // 1-3, shown as emoji on posts
   city        String? // e.g. "Charlotte, NC"
+  greatFor    String? // comma-separated tags, e.g. "Date Night,Brunch" (backend/filter only)
   websiteUrl  String? // the restaurant's own website
   sourceUrl   String? // link to the original Substack post, if imported
   isReview    Boolean   @default(true) // false for quick mentions with no full write-up

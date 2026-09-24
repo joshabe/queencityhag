@@ -3,6 +3,15 @@ import Link from "next/link";
 export default function SiteHeader() {
   return (
     <header className="relative pt-20 sm:pt-10 pb-8 px-4 flex justify-center">
+      <div className="absolute left-4 top-4 sm:left-6 sm:top-6 flex items-center">
+        <Link
+          href="/about"
+          className="font-bold text-sm uppercase hover:opacity-70 transition-opacity"
+        >
+          About
+        </Link>
+      </div>
+
       <div className="absolute right-4 top-4 sm:right-6 sm:top-6 flex items-center gap-4">
         <a
           href="https://substack.com/@queencityhag"
@@ -70,7 +79,10 @@ export default function SiteHeader() {
             className="w-72 sm:w-96 h-auto"
           />
         </Link>
-        <p className="max-w-sm text-sm">The Official List®</p>
+        <p className="max-w-sm text-sm">
+          The Official Hag Guide® to food and drinks in the Queen City and
+          beyond
+        </p>
       </div>
     </header>
   );

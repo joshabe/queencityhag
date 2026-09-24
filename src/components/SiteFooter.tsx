@@ -5,7 +5,7 @@ export default function SiteFooter() {
         href="https://substack.com/@queencityhag"
         target="_blank"
         rel="noopener noreferrer"
-        className="border-[2px] border-[var(--hag-blue)] rounded-full px-8 py-3 font-bold hover:bg-[var(--hag-blue)] hover:text-white transition-colors"
+        className="border-[2px] border-[var(--hag-blue)] px-8 py-3 font-bold hover:bg-[var(--hag-blue)] hover:text-white transition-colors"
       >
         Get the Newsletter
       </a>

@@ -3,25 +3,23 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 const OPTIONS = [
-  { value: "", label: "All ratings" },
-  { value: "fire-1", label: "🔥 (1)" },
-  { value: "fire-2", label: "🔥🔥 (2)" },
-  { value: "fire-3", label: "🔥🔥🔥 (3)" },
-  { value: "knife-1", label: "🔪 (1)" },
-  { value: "knife-2", label: "🔪🔪 (2)" },
-  { value: "knife-3", label: "🔪🔪🔪 (3)" },
+  { value: "", label: "Price" },
+  { value: "1", label: "$" },
+  { value: "2", label: "$$" },
+  { value: "3", label: "$$$" },
+  { value: "4", label: "$$$$" },
 ];
 
-export default function RatingFilterDropdown() {
+export default function PriceFilterDropdown() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const params = new URLSearchParams(searchParams.toString());
     if (e.target.value) {
-      params.set("rating", e.target.value);
+      params.set("price", e.target.value);
     } else {
-      params.delete("rating");
+      params.delete("price");
     }
     const query = params.toString();
     router.push(query ? `/?${query}` : "/");
@@ -30,7 +28,7 @@ export default function RatingFilterDropdown() {
   return (
     <div className="relative inline-flex items-center min-w-0">
       <select
-        value={searchParams.get("rating") ?? ""}
+        value={searchParams.get("price") ?? ""}
         onChange={handleChange}
         className="w-full appearance-none border-[2px] border-[var(--hag-blue)] pl-3 pr-8 py-1.5 font-bold text-sm leading-5 bg-[#f2eee9]"
       >

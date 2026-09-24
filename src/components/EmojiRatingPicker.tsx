@@ -2,7 +2,7 @@
 
 type RatingType = "fire" | "knife" | null;
 
-export default function RatingPicker({
+export default function EmojiRatingPicker({
   ratingType,
   ratingCount,
   onChange,

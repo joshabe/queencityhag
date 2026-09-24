@@ -52,8 +52,10 @@ export async function PUT(request: Request, { params }: Params) {
     city,
     websiteUrl,
     sourceUrl,
+    priceCount,
     ratingType,
     ratingCount,
+    greatFor,
     published,
   } = await request.json();
 
@@ -66,8 +68,10 @@ export async function PUT(request: Request, { params }: Params) {
     city?: string | null;
     websiteUrl?: string | null;
     sourceUrl?: string | null;
+    priceCount?: number | null;
     ratingType?: string | null;
     ratingCount?: number | null;
+    greatFor?: string | null;
     published?: boolean;
     publishedAt?: Date | null;
   } = {};
@@ -82,12 +86,22 @@ export async function PUT(request: Request, { params }: Params) {
   if (city !== undefined) data.city = city || null;
   if (websiteUrl !== undefined) data.websiteUrl = websiteUrl || null;
   if (sourceUrl !== undefined) data.sourceUrl = sourceUrl || null;
+  if (priceCount !== undefined) {
+    const validPrice =
+      typeof priceCount === "number" && priceCount >= 1 && priceCount <= 4;
+    data.priceCount = validPrice ? priceCount : null;
+  }
   if (ratingType !== undefined || ratingCount !== undefined) {
-    const validType = ratingType === "fire" || ratingType === "knife";
-    const validCount =
+    const validRatingType = ratingType === "fire" || ratingType === "knife";
+    const validRatingCount =
       typeof ratingCount === "number" && ratingCount >= 1 && ratingCount <= 3;
-    data.ratingType = validType && validCount ? ratingType : null;
-    data.ratingCount = validType && validCount ? ratingCount : null;
+    data.ratingType =
+      validRatingType && validRatingCount ? ratingType : null;
+    data.ratingCount =
+      validRatingType && validRatingCount ? ratingCount : null;
+  }
+  if (greatFor !== undefined) {
+    data.greatFor = typeof greatFor === "string" && greatFor ? greatFor : null;
   }
   if (typeof published === "boolean") {
     data.published = published;

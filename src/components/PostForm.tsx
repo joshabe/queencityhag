@@ -2,24 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import RatingPicker from "@/components/RatingPicker";
-
-const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
-  ssr: false,
-});
+import PricePicker from "@/components/PricePicker";
+import EmojiRatingPicker from "@/components/EmojiRatingPicker";
+import {
+  GREAT_FOR_SUGGESTIONS,
+  parseGreatFor,
+  serializeGreatFor,
+} from "@/lib/greatFor";
 
 type PostData = {
   id?: string;
   title: string;
-  content: string;
   excerpt: string | null;
   coverImage: string | null;
   city: string | null;
   websiteUrl: string | null;
   sourceUrl: string | null;
+  priceCount: number | null;
   ratingType: string | null;
   ratingCount: number | null;
+  greatFor: string | null;
   published: boolean;
 };
 
@@ -28,18 +30,24 @@ export default function PostForm({ initial }: { initial?: PostData }) {
   const isEditing = Boolean(initial?.id);
 
   const [title, setTitle] = useState(initial?.title ?? "");
-  const [content, setContent] = useState(initial?.content ?? "");
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? "");
   const [coverImage, setCoverImage] = useState(initial?.coverImage ?? "");
   const [city, setCity] = useState(initial?.city ?? "Charlotte, NC");
   const [websiteUrl, setWebsiteUrl] = useState(initial?.websiteUrl ?? "");
   const [sourceUrl, setSourceUrl] = useState(initial?.sourceUrl ?? "");
+  const [priceCount, setPriceCount] = useState<number | null>(
+    initial?.priceCount ?? null
+  );
   const [ratingType, setRatingType] = useState<"fire" | "knife" | null>(
     (initial?.ratingType as "fire" | "knife" | null) ?? null
   );
   const [ratingCount, setRatingCount] = useState<number | null>(
     initial?.ratingCount ?? null
   );
+  const [greatFor, setGreatFor] = useState<string[]>(
+    parseGreatFor(initial?.greatFor)
+  );
+  const [greatForInput, setGreatForInput] = useState("");
   const [published, setPublished] = useState(initial?.published ?? false);
   const [saving, setSaving] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
@@ -66,6 +74,17 @@ export default function PostForm({ initial }: { initial?: PostData }) {
     }
   }
 
+  function addGreatFor(raw: string) {
+    const tag = raw.trim();
+    if (!tag) return;
+    setGreatFor((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+    setGreatForInput("");
+  }
+
+  function removeGreatFor(tag: string) {
+    setGreatFor((prev) => prev.filter((t) => t !== tag));
+  }
+
   async function handleSave(publishOverride?: boolean) {
     if (!title.trim()) {
       setError("Title is required");
@@ -76,14 +95,16 @@ export default function PostForm({ initial }: { initial?: PostData }) {
     try {
       const body = {
         title,
-        content,
+        content: excerpt,
         excerpt: excerpt || null,
         coverImage: coverImage || null,
         city: city || null,
         websiteUrl: websiteUrl || null,
         sourceUrl: sourceUrl || null,
+        priceCount,
         ratingType,
         ratingCount,
+        greatFor: serializeGreatFor(greatFor),
         published: publishOverride ?? published,
       };
       const url = isEditing ? `/api/posts/${initial!.id}` : "/api/posts";
@@ -205,9 +226,16 @@ export default function PostForm({ initial }: { initial?: PostData }) {
 
       <div className="space-y-1">
         <label className="text-sm text-gray-700">
-          Final take rating (optional)
+          Price (optional, backend/filter only — not shown on posts)
         </label>
-        <RatingPicker
+        <PricePicker priceCount={priceCount} onChange={setPriceCount} />
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-sm text-gray-700">
+          Final take rating (optional, shown on posts)
+        </label>
+        <EmojiRatingPicker
           ratingType={ratingType}
           ratingCount={ratingCount}
           onChange={(type, count) => {
@@ -217,22 +245,72 @@ export default function PostForm({ initial }: { initial?: PostData }) {
         />
       </div>
 
+      <div className="space-y-2">
+        <label className="text-sm text-gray-700">
+          Great for (optional, backend/filter only — not shown on posts)
+        </label>
+
+        {greatFor.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {greatFor.map((tag) => (
+              <span
+                key={tag}
+                className="flex items-center gap-1 text-sm bg-gray-900 text-white rounded-md pl-3 pr-2 py-1.5"
+              >
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => removeGreatFor(tag)}
+                  className="hover:opacity-70"
+                  aria-label={`Remove ${tag}`}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        <input
+          value={greatForInput}
+          onChange={(e) => setGreatForInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === ",") {
+              e.preventDefault();
+              addGreatFor(greatForInput);
+            }
+          }}
+          placeholder="Type a tag and press Enter (e.g. Rooftop, Late Night)"
+          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+        />
+
+        <div className="flex flex-wrap gap-2">
+          {GREAT_FOR_SUGGESTIONS.filter((tag) => !greatFor.includes(tag)).map(
+            (tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => addGreatFor(tag)}
+                className="text-sm border border-gray-300 rounded-md px-3 py-1.5 hover:bg-gray-50"
+              >
+                + {tag}
+              </button>
+            )
+          )}
+        </div>
+      </div>
+
       <div className="space-y-1">
         <label htmlFor="excerpt" className="text-sm text-gray-700">
-          Excerpt (optional)
+          Content (optional)
         </label>
         <textarea
           id="excerpt"
           value={excerpt}
           onChange={(e) => setExcerpt(e.target.value)}
-          rows={2}
+          rows={6}
           className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
         />
-      </div>
-
-      <div>
-        <label className="text-sm text-gray-700 mb-1 block">Content</label>
-        <RichTextEditor content={content} onChange={setContent} />
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}

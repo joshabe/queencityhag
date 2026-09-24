@@ -18,7 +18,7 @@ export default async function PostPage({
   if (!post || !post.published) notFound();
 
   return (
-    <div className="min-h-screen max-w-[1000px] mx-auto">
+    <div className="min-h-screen w-full max-w-[1000px] mx-auto">
       <SiteHeader />
 
       <main className="max-w-2xl mx-auto px-4 sm:px-0 pb-20">
@@ -51,41 +51,35 @@ export default async function PostPage({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={post.coverImage} alt={post.title} />
               </div>
-              {((post.ratingType && post.ratingCount) ||
-                (post.isReview && post.sourceUrl)) && (
-                <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between gap-3 bg-[#f2eee9] border-t-[2px] border-b-[2px] border-[var(--hag-blue)] px-6 pt-[10px] pb-2">
-                  <div className="flex items-center gap-2">
-                    {post.ratingType && post.ratingCount && (
-                      <>
-                        <p className="font-bold">RATING:</p>
-                        <p className="leading-none">
-                          {(post.ratingType === "fire" ? "🔥" : "🔪").repeat(
-                            post.ratingCount
-                          )}
-                        </p>
-                      </>
+              {post.ratingType && post.ratingCount && (
+                <div className="absolute bottom-0 left-0 right-0 flex items-center gap-2 bg-[#f2eee9] border-t-[2px] border-b-[2px] border-[var(--hag-blue)] px-6 pt-[10px] pb-2">
+                  <p className="font-bold">RATING:</p>
+                  <p className="leading-none">
+                    {(post.ratingType === "fire" ? "🔥" : "🔪").repeat(
+                      post.ratingCount
                     )}
-                  </div>
-                  {post.isReview && post.sourceUrl && (
-                    <a
-                      href={post.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-bold whitespace-nowrap hover:opacity-70"
-                    >
-                      Read full review
-                    </a>
-                  )}
+                  </p>
                 </div>
               )}
             </div>
           )}
 
           <div className="p-6 pt-4">
-            <div
-              className="hag-prose max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+            {post.excerpt && (
+              <p className="leading-relaxed whitespace-pre-wrap">
+                {post.excerpt}
+              </p>
+            )}
+            {post.isReview && post.sourceUrl && (
+              <a
+                href={post.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 border-[2px] border-[var(--hag-blue)] px-4 py-2 font-bold hover:bg-[var(--hag-blue)] hover:text-white transition-colors"
+              >
+                Read the full review
+              </a>
+            )}
           </div>
         </article>
 

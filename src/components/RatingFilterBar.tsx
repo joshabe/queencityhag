@@ -1,12 +1,18 @@
 import Link from "next/link";
 import CityFilterDropdown from "@/components/CityFilterDropdown";
 import CityFilterMobileDropdown from "@/components/CityFilterMobileDropdown";
-import RatingFilterDropdown from "@/components/RatingFilterDropdown";
+import PriceFilterDropdown from "@/components/PriceFilterDropdown";
+import GreatForFilterDropdown from "@/components/GreatForFilterDropdown";
 
-function buildHref(rating: string | undefined, city: string | undefined) {
+function buildHref(
+  price: string | undefined,
+  city: string | undefined,
+  greatFor: string[]
+) {
   const params = new URLSearchParams();
-  if (rating) params.set("rating", rating);
+  if (price) params.set("price", price);
   if (city) params.set("city", city);
+  if (greatFor.length > 0) params.set("greatFor", greatFor.join(","));
   const query = params.toString();
   return query ? `/?${query}` : "/";
 }
@@ -21,63 +27,55 @@ export default function RatingFilterBar({
   current,
   city,
   cities,
+  greatFor,
+  greatForTags,
 }: {
   current?: string;
   city: string;
   cities: string[];
+  greatFor: string[];
+  greatForTags: string[];
 }) {
-  const fireValues = [1, 2, 3].map((n) => `fire-${n}`);
-  const knifeValues = [1, 2, 3].map((n) => `knife-${n}`);
+  const priceValues = [1, 2, 3, 4].map((n) => String(n));
 
   return (
     <div className="mb-10 border-t-[2px] border-b-[2px] border-[var(--hag-blue)] py-4">
-      <div className="flex items-center justify-between gap-2 sm:gap-4">
-        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-          <div className="shrink-0 self-stretch flex items-center pr-2 sm:pr-4 border-r-[2px] border-[var(--hag-blue)]">
-            <span className="font-bold text-sm whitespace-nowrap">
-              FILTER
-            </span>
-          </div>
-
-          {/* Mobile: rating dropdown */}
-          <div className="sm:hidden flex-1 min-w-0">
-            <RatingFilterDropdown />
-          </div>
-
-          {/* Desktop/tablet: connected pill set */}
-          <div className="hidden sm:inline-flex min-w-0 max-w-full overflow-x-auto border-[2px] border-[var(--hag-blue)]">
-            <Link
-              href={buildHref(undefined, city)}
-              className={segmentClass(!current, true)}
-            >
-              All
-            </Link>
-            {fireValues.map((value, i) => (
-              <Link
-                key={value}
-                href={buildHref(value, city)}
-                className={segmentClass(current === value, false)}
-              >
-                {"🔥".repeat(i + 1)}
-              </Link>
-            ))}
-            {knifeValues.map((value, i) => (
-              <Link
-                key={value}
-                href={buildHref(value, city)}
-                className={segmentClass(current === value, false)}
-              >
-                {"🔪".repeat(i + 1)}
-              </Link>
-            ))}
-          </div>
-        </div>
-
+      <div className="flex items-center flex-wrap gap-2 sm:gap-4">
         <div className="shrink-0 sm:hidden">
           <CityFilterMobileDropdown cities={cities} current={city} />
         </div>
         <div className="hidden sm:block shrink-0">
           <CityFilterDropdown cities={cities} current={city} />
+        </div>
+
+        <div className="shrink-0">
+          <GreatForFilterDropdown current={greatFor} tags={greatForTags} />
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          {/* Mobile: price dropdown */}
+          <div className="sm:hidden shrink-0">
+            <PriceFilterDropdown />
+          </div>
+
+          {/* Desktop/tablet: connected pill set */}
+          <div className="hidden sm:inline-flex min-w-0 max-w-full overflow-x-auto border-[2px] border-[var(--hag-blue)]">
+            <Link
+              href={buildHref(undefined, city, greatFor)}
+              className={segmentClass(!current, true)}
+            >
+              All
+            </Link>
+            {priceValues.map((value, i) => (
+              <Link
+                key={value}
+                href={buildHref(value, city, greatFor)}
+                className={segmentClass(current === value, false)}
+              >
+                {"$".repeat(i + 1)}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>

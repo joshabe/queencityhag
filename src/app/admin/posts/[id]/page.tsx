@@ -17,14 +17,15 @@ export default async function EditPostPage({
       initial={{
         id: post.id,
         title: post.title,
-        content: post.content,
         excerpt: post.excerpt,
         coverImage: post.coverImage,
         city: post.city,
         websiteUrl: post.websiteUrl,
         sourceUrl: post.sourceUrl,
+        priceCount: post.priceCount,
         ratingType: post.ratingType,
         ratingCount: post.ratingCount,
+        greatFor: post.greatFor,
         published: post.published,
       }}
     />

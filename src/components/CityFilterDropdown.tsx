@@ -67,7 +67,7 @@ export default function CityFilterDropdown({
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 z-10 min-w-full w-max border-[2px] border-[var(--hag-blue)] bg-[#f2eee9]">
+        <div className="absolute left-0 top-full mt-2 z-10 min-w-full w-max border-[2px] border-[var(--hag-blue)] bg-[#f2eee9]">
           {groups.map((group, i) => (
             <div key={group.state}>
               <p

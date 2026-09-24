@@ -40,8 +40,10 @@ export async function POST(request: Request) {
     city,
     websiteUrl,
     sourceUrl,
+    priceCount,
     ratingType,
     ratingCount,
+    greatFor,
     published,
   } = await request.json();
 
@@ -50,8 +52,10 @@ export async function POST(request: Request) {
   }
 
   const slug = await uniqueSlug(title);
-  const validType = ratingType === "fire" || ratingType === "knife";
-  const validCount =
+  const validPrice =
+    typeof priceCount === "number" && priceCount >= 1 && priceCount <= 4;
+  const validRatingType = ratingType === "fire" || ratingType === "knife";
+  const validRatingCount =
     typeof ratingCount === "number" && ratingCount >= 1 && ratingCount <= 3;
 
   const post = await prisma.post.create({
@@ -64,8 +68,10 @@ export async function POST(request: Request) {
       city: city ?? null,
       websiteUrl: websiteUrl ?? null,
       sourceUrl: sourceUrl ?? null,
-      ratingType: validType && validCount ? ratingType : null,
-      ratingCount: validType && validCount ? ratingCount : null,
+      priceCount: validPrice ? priceCount : null,
+      ratingType: validRatingType && validRatingCount ? ratingType : null,
+      ratingCount: validRatingType && validRatingCount ? ratingCount : null,
+      greatFor: typeof greatFor === "string" && greatFor ? greatFor : null,
       published: Boolean(published),
       publishedAt: published ? new Date() : null,
     },
