@@ -119,3 +119,56 @@ html {
 .hag-prose img {
   border: 2px solid var(--hag-blue);
 }
+
+/* About page body: large serif paragraphs, with an optional small monospace "fine print" paragraph.
+   Shared by the public page and the admin editor so the editor matches what publishes. */
+.about-content p {
+  font-family: var(--font-heading), Georgia, serif;
+  font-size: 2.25rem;
+  line-height: 1.625;
+  margin-top: 1.5rem;
+}
+.about-content > p:first-child {
+  margin-top: 0;
+}
+.about-content p[data-variant="fine"] {
+  font-family: var(--font-body), ui-monospace, monospace;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 2rem;
+}
+.about-content h2,
+.about-content h3 {
+  font-family: var(--font-heading), Georgia, serif;
+  font-weight: 700;
+  margin-top: 2rem;
+}
+.about-content h2 {
+  font-size: 1.875rem;
+}
+.about-content h3 {
+  font-size: 1.5rem;
+}
+.about-content ul,
+.about-content ol {
+  font-family: var(--font-heading), Georgia, serif;
+  font-size: 2.25rem;
+  line-height: 1.625;
+  margin-top: 1.5rem;
+  padding-left: 2rem;
+}
+.about-content ul {
+  list-style: disc;
+}
+.about-content ol {
+  list-style: decimal;
+}
+.about-content a {
+  text-decoration: underline;
+}
+.about-content strong {
+  font-weight: 700;
+}
+.about-content em {
+  font-style: italic;
+}

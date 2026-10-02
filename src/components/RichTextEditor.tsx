@@ -20,7 +20,7 @@ async function uploadImage(file: File): Promise<string> {
   return url as string;
 }
 
-function ToolbarButton({
+export function ToolbarButton({
   onClick,
   active,
   disabled,
