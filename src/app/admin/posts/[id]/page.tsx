@@ -1,5 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUserId } from "@/lib/auth";
 import PostForm from "@/components/PostForm";
 
 export default async function EditPostPage({
@@ -7,6 +8,8 @@ export default async function EditPostPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  if (!(await getCurrentUserId())) redirect("/admin/login");
+
   const { id } = await params;
   const post = await prisma.post.findUnique({ where: { id } });
 

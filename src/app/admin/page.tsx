@@ -1,8 +1,12 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUserId } from "@/lib/auth";
 import DeletePostButton from "@/components/DeletePostButton";
 
 export default async function AdminDashboard() {
+  if (!(await getCurrentUserId())) redirect("/admin/login");
+
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
   });

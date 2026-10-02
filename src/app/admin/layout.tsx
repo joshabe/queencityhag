@@ -30,6 +30,12 @@ export default async function AdminLayout({
               <Link href="/" className="text-gray-600 hover:text-gray-900">
                 View site
               </Link>
+              <Link
+                href="/admin/account"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Account
+              </Link>
               <LogoutButton />
             </nav>
           </div>

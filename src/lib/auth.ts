@@ -10,8 +10,19 @@ function getSecret() {
   return new TextEncoder().encode(secret);
 }
 
-export async function createSessionToken(userId: string) {
-  return new SignJWT({ userId })
+// Fingerprint of the password hash; sessions stop working when the password changes.
+export async function passwordVersion(passwordHash: string) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(passwordHash)
+  );
+  return Array.from(new Uint8Array(digest).slice(0, 8))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export async function createSessionToken(userId: string, pv: string) {
+  return new SignJWT({ userId, pv })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${SESSION_DURATION}s`)
@@ -21,7 +32,7 @@ export async function createSessionToken(userId: string) {
 export async function verifySessionToken(token: string) {
   try {
     const { payload } = await jwtVerify(token, getSecret());
-    return payload as { userId: string };
+    return payload as { userId: string; pv?: string };
   } catch {
     return null;
   }
@@ -43,12 +54,24 @@ export async function clearSessionCookie() {
   cookieStore.delete(SESSION_COOKIE);
 }
 
-export async function getCurrentUserId() {
+export async function getCurrentUser() {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const payload = await verifySessionToken(token);
-  return payload?.userId ?? null;
+  if (!payload?.userId || !payload.pv) return null;
+
+  // Dynamic import keeps Prisma out of proxy.ts, which only does cookie checks.
+  const { prisma } = await import("@/lib/prisma");
+  const user = await prisma.user.findUnique({ where: { id: payload.userId } });
+  if (!user) return null;
+  if (payload.pv !== (await passwordVersion(user.passwordHash))) return null;
+  return user;
+}
+
+export async function getCurrentUserId() {
+  const user = await getCurrentUser();
+  return user?.id ?? null;
 }
 
 export { SESSION_COOKIE };
